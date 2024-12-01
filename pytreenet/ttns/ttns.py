@@ -48,8 +48,9 @@ class TreeTensorNetworkState(TreeTensorNetwork):
                 legs = tuple(range(tensor.ndim))
                 return complex(np.tensordot(tensor, tensor_conj, axes=(legs,legs)))
             # Very inefficient, fix later without copy
-            other = deepcopy(self)
-        return contract_two_ttns(self, other.conjugate())
+            other = self
+        other_conj = other.conjugate()
+        return contract_two_ttns(self, other_conj)
 
     def normalise(self) -> float:
         """
