@@ -38,7 +38,7 @@ class QuantumGate(ABC):
         pass
 
     @abstractmethod
-    def compare_different_final_times(self, ttns, *args, **kwargs):
+    def compare_results(self, ttns, *args, **kwargs):
         """
         Apply the gate to the given quantum state.
         Args:
@@ -97,13 +97,16 @@ class XGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(self, ttns, final_times, node_id, time_step_size):
+    def compare_results(self, ttns, final_times, node_id, time_step_size):
         results = {}
         for final_time in final_times:
-            results[final_time] = self.apply_gate(
-                ttns, node_id, time_step_size, final_time
+            evolved_ttns = self.apply_gate(
+                ttns, node_id=node_id, time_step_size=time_step_size, final_time=final_time
             )
+            # Store the final state tensor of the node
+            results[final_time] = evolved_ttns.tensors[node_id]
         return results
+
 
 
 class YGate(QuantumGate):
@@ -144,7 +147,7 @@ class YGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(self, ttns, final_times, node_id, time_step_size):
+    def compare_results(self, ttns, final_times, node_id, time_step_size):
         results = {}
         for final_time in final_times:
             results[final_time] = self.apply_gate(
@@ -191,7 +194,7 @@ class ZGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(self, ttns, final_times, node_id, time_step_size):
+    def compare_results(self, ttns, final_times, node_id, time_step_size):
         results = {}
         for final_time in final_times:
             results[final_time] = self.apply_gate(
@@ -240,7 +243,7 @@ class HadamardGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(self, ttns, final_times, node_id, time_step_size):
+    def compare_results(self, ttns, final_times, node_id, time_step_size):
         results = {}
         for final_time in final_times:
             results[final_time] = self.apply_gate(
@@ -310,7 +313,7 @@ class CNOTGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(
+    def compare_results(
         self, ttns, final_times, control_id, target_id, time_step_size, config
     ):
         results = {}
@@ -383,7 +386,7 @@ class SWAPGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(
+    def compare_results(
         self, ttns, final_times, control_id, target_id, time_step_size, config
     ):
         results = {}
@@ -436,7 +439,7 @@ class PhaseShiftGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(
+    def compare_results(
         self, ttns, final_times, node_id, time_step_size, phase_shift
     ):
         results = {}
@@ -518,7 +521,7 @@ class ControlledPhaseGate(QuantumGate):
 
         show()
 
-    def compare_different_final_times(
+    def compare_results(
         self, ttns, final_times, control_id, target_id, time_step_size, phase_shift
     ):
         results = {}
